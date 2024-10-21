@@ -1,0 +1,4 @@
+- name: Install apache rom apache-role 
+  hosts: localhost
+  roles: 
+    - name: sample-apache

@@ -1,0 +1,35 @@
+---
+  - name: Bulut Bilişim Demo Playbook
+    hosts: localhost
+    become: yes
+    become_method: dzdo
+    vars:
+      greetings: "Bulut Bilişim Kampına Hoşgeldiniz!" 
+    tasks:
+      - name: 
+        debug:
+          msg: "{{ greetings }}"
+ 
+      - name: Sunucularda ram ve kernel versiyon bilgilerinin serverinfo.txt dosyasına yazılması 
+        block:
+          - name:  serverinfo.txt dosyasının oluşturulması
+            file:
+              path: /root/serverinfo.txt
+              state: touch        
+              mode: 0777
+      
+          - name: Bilgilerin dosyaya yazılması
+            template:
+              src: mem.j2
+              dest: /root/serverinfo.txt
+        rescue:
+          - debug:
+              msg: 'Bir hata var :)'
+
+      - name: Çıktının doğrulanması
+        shell: cat /root/serverinfo.txt
+        register: server_content
+
+      - name: Serverinfo.txt dosyasının içeriğinin kontrolü
+        debug: 
+          msg: "{{ server_content.stdout_lines }}"
