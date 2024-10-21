@@ -5,17 +5,6 @@
    name: "{{ apache_service }}" 
    state: started
    enabled: yes
-- name: Enable firewalld
-  service: 
-   name: "{{ firewall_service }}"
-   state: started
-   enabled: yes
-- name: Allow webserver service
-  firewalld:
-   service: http
-   state: enabled
-   permanent: yes
-   immediate: yes
 - name: Create index file from index.html.j2
   template:
    src: index.html.j2
